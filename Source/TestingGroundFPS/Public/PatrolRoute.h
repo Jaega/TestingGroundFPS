@@ -16,7 +16,7 @@ class TESTINGGROUNDFPS_API UPatrolRoute : public UActorComponent
 public:
 	TArray<AActor*> GetPatrolPoints() const;
 private:
-	UPROPERTY(EditInstanceOnly, Category = PatrolRoute)
+	UPROPERTY(EditDefaultsOnly, Category = PatrolRoute)
 	TArray<AActor*> PatrolPoints; 
 		
 	
