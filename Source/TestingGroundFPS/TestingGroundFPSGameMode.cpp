@@ -2,7 +2,7 @@
 
 #include "TestingGroundFPSGameMode.h"
 #include "TestingGroundFPSHUD.h"
-#include "TestingGroundFPSCharacter.h"
+#include "FirstPerson/FirstPersonCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ATestingGroundFPSGameMode::ATestingGroundFPSGameMode()
