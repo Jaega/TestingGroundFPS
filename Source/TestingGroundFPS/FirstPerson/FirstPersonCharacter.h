@@ -44,7 +44,14 @@ public:
 protected:
 	virtual void BeginPlay();
 
+private:
+	class AGun* Gun;
+
 public:
+
+	UPROPERTY(EditDefaultsOnly, Category=Setup)
+	TSubclassOf<class AGun> GunBlueprint;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
