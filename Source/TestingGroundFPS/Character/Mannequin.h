@@ -22,6 +22,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<class AGun> GunBlueprint;
 
+	virtual void UnPossessed() override;
+
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void PullTrigger();
 
@@ -36,5 +38,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class AGun* Gun;
+
 
 };
