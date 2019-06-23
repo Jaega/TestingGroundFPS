@@ -25,15 +25,20 @@ void ATile::Tick(float DeltaTime)
 
 }
 
-void ATile::PlaceActors()
+void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int Min, int Max)
 {
 	auto MinPoint = FVector(0, -2000, 0);
-	auto MaxPoint = FVector(1000, 2000, 0);
+	auto MaxPoint = FVector(4000, 2000, 0);
 	auto Bound = FBox(MinPoint, MaxPoint);
-	for (size_t i = 0; i < 5; i++)
+	auto count = FMath::RandRange(Min, Max);
+	for (size_t i = 0; i < count; i++)
 	{
 		auto SpawnPoint = FMath::RandPointInBox(Bound);
 		UE_LOG(LogTemp, Warning, TEXT("Spawn Actor at: %s"), *SpawnPoint.ToString())
+		AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ToSpawn);
+
+		SpawnedActor->SetActorRelativeLocation(SpawnPoint);
+		SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
 	}
 	
 	
