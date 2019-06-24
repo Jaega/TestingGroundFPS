@@ -15,9 +15,7 @@ ATile::ATile()
 // Called when the game starts or when spawned
 void ATile::BeginPlay()
 {
-	Super::BeginPlay();
-	//CanSpawnAtLocation(GetActorLocation() + FVector(0,0,100), 100);
-	
+	Super::BeginPlay();	
 }
 
 // Called every frame
@@ -88,16 +86,7 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	);
 	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
 
-	DrawDebugCapsule(
-    	GetWorld(),
-    	GlobalLocation,
-		0,
-    	Radius,
-    	FQuat::Identity,
-    	ResultColor,
-    	true,
-    	Radius
-	);
+	//DrawDebugCapsule(GetWorld(), GlobalLocation, 0, Radius, FQuat::Identity, ResultColor, true, Radius);
 	return ! HasHit;
 }
 
