@@ -27,15 +27,18 @@ void ATile::Tick(float DeltaTime)
 
 }
 
-void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int Min, int Max, float Radius)
+void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinNum, int MaxNum, float Radius, float MinScale, float MaxScale)
 {
-	auto count = FMath::RandRange(Min, Max);
+	auto count = FMath::RandRange(MinNum, MaxNum);
 	for (size_t i = 0; i < count; i++)
 	{
 		FVector SpawnPoint;
-		if(FindEmptySpace(SpawnPoint, Radius))
+		float RandomScale = FMath::RandRange(MinScale, MaxScale);
+		if(FindEmptySpace(SpawnPoint, Radius * RandomScale))
 		{
-			PlaceActor(ToSpawn, SpawnPoint);
+			float RandomRotation = FMath::RandRange(-180.f, 180.f);
+			
+			PlaceActor(ToSpawn, SpawnPoint, RandomRotation, RandomScale);
 		}
 	}
 }
@@ -52,7 +55,6 @@ bool ATile::FindEmptySpace(FVector& ResultPoint, float Radius)
 		FVector CandidatePoint = FMath::RandPointInBox(Bound);
 		if(CanSpawnAtLocation(CandidatePoint, Radius))
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("Not Empty"));
 			ResultPoint = CandidatePoint;
 			return true;
 		}
@@ -63,11 +65,13 @@ bool ATile::FindEmptySpace(FVector& ResultPoint, float Radius)
 }
 
 
-void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint)
+void ATile::PlaceActor(TSubclassOf<AActor> ToSpawn, FVector SpawnPoint, float Rotation, float Scale)
 {
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ToSpawn);
 	SpawnedActor->SetActorRelativeLocation(SpawnPoint);
 	SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	SpawnedActor->SetActorRotation(FRotator(0, Rotation, 0));
+	SpawnedActor->SetActorScale3D(FVector(Scale));
 }
 
 bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
