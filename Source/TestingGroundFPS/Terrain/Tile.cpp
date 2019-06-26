@@ -10,14 +10,14 @@ ATile::ATile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	MinExtent = FVector(0, -2000, 0);
+	MaxExtent = FVector(4000, 2000, 0);
 }
 
 // Called when the game starts or when spawned
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();	
-
 }
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -31,7 +31,6 @@ void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ATile::SetPool(UActorPool* PoolToSet)
@@ -45,10 +44,10 @@ void ATile::PositionNavMeshBoundsVolume()
 	NavMeshBoundsVolume = Pool->Checkout();
 	if (!NavMeshBoundsVolume)
 	{
-		UE_LOG(LogTemp, Error, TEXT("NavMeshBoundsVolume is NULL"));
+		UE_LOG(LogTemp, Error, TEXT("[%s]: Not enough volumes in pool"), *GetName());
 		return;
 	}
-	
+	UE_LOG(LogTemp, Warning, TEXT("[%s] checked out: [%s]"), *GetName(), *NavMeshBoundsVolume->GetName());
 	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
 }
 
@@ -70,9 +69,7 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinNum, int MaxNum, flo
 
 bool ATile::FindEmptySpace(FVector& ResultPoint, float Radius)
 {
-	auto MinPoint = FVector(0, -2000, 0);
-	auto MaxPoint = FVector(4000, 2000, 0);
-	auto Bound = FBox(MinPoint, MaxPoint);
+	auto Bound = FBox(MinExtent, MaxExtent);
 	
 	const int MAX_ATTEMPTS = 100;
 	for (size_t i = 0; i < MAX_ATTEMPTS; i++)
@@ -113,7 +110,6 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	);
 	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
 
-	//DrawDebugCapsule(GetWorld(), GlobalLocation, 0, Radius, FQuat::Identity, ResultColor, true, Radius);
 	return ! HasHit;
 }
 
