@@ -2,6 +2,7 @@
 
 #include "Tile.h"
 #include "DrawDebugHelpers.h"
+#include "ActorPool.h"
 
 
 // Sets default values
@@ -19,11 +20,36 @@ void ATile::BeginPlay()
 
 }
 
+void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	UE_LOG(LogTemp, Warning, TEXT("[%s] endplay"), *GetName());
+	Pool->Return(NavMeshBoundsVolume);
+}
+
 // Called every frame
 void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ATile::SetPool(UActorPool* PoolToSet)
+{
+	Pool = PoolToSet;
+	PositionNavMeshBoundsVolume();
+}
+
+void ATile::PositionNavMeshBoundsVolume()
+{
+	NavMeshBoundsVolume = Pool->Checkout();
+	if (!NavMeshBoundsVolume)
+	{
+		UE_LOG(LogTemp, Error, TEXT("NavMeshBoundsVolume is NULL"));
+		return;
+	}
+	
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinNum, int MaxNum, float Radius, float MinScale, float MaxScale)
@@ -90,6 +116,8 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	//DrawDebugCapsule(GetWorld(), GlobalLocation, 0, Radius, FQuat::Identity, ResultColor, true, Radius);
 	return ! HasHit;
 }
+
+
 
 
 
