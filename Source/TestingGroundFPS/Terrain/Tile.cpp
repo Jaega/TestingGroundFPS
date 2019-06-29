@@ -3,6 +3,8 @@
 #include "Tile.h"
 #include "DrawDebugHelpers.h"
 #include "ActorPool.h"
+#include "AI/Navigation/NavigationSystem.h"
+#include "engine/world.h"
 
 
 // Sets default values
@@ -12,6 +14,8 @@ ATile::ATile()
 	PrimaryActorTick.bCanEverTick = true;
 	MinExtent = FVector(0, -2000, 0);
 	MaxExtent = FVector(4000, 2000, 0);
+
+	NavigationBoundsOffset = FVector(2000, 0, 0);
 }
 
 // Called when the game starts or when spawned
@@ -22,9 +26,12 @@ void ATile::BeginPlay()
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	Super::EndPlay(EndPlayReason);
+	//Super::EndPlay(EndPlayReason);
 	UE_LOG(LogTemp, Warning, TEXT("[%s] endplay"), *GetName());
-	Pool->Return(NavMeshBoundsVolume);
+	if (Pool && NavMeshBoundsVolume)
+	{
+		Pool->Return(NavMeshBoundsVolume);
+	}
 }
 
 // Called every frame
@@ -35,6 +42,7 @@ void ATile::Tick(float DeltaTime)
 
 void ATile::SetPool(UActorPool* PoolToSet)
 {
+	//UE_LOG(LogTemp, Warning, TEXT("[%s] Setting Pool %s"), *(this->GetName()), *(PoolToSet->GetName()));
 	Pool = PoolToSet;
 	PositionNavMeshBoundsVolume();
 }
@@ -48,7 +56,11 @@ void ATile::PositionNavMeshBoundsVolume()
 		return;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("[%s] checked out: [%s]"), *GetName(), *NavMeshBoundsVolume->GetName());
-	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation() + NavigationBoundsOffset);
+	//FNavigationSystem::Build(*GetWorld());
+	UWorld* const World=GetWorld();
+	auto NavSystem = World->GetNavigationSystem();
+	NavSystem->Build();
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinNum, int MaxNum, float Radius, float MinScale, float MaxScale)

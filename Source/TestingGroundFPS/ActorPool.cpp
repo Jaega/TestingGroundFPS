@@ -20,8 +20,8 @@ AActor* UActorPool::Checkout()
 		UE_LOG(LogTemp, Warning, TEXT("[%s]: Nothing to checkout."), *GetName());
 		return nullptr;
 	}
-	AActor* VolumeToCheckout = Pool.Pop();
-	return VolumeToCheckout;
+	//AActor* VolumeToCheckout = Pool.Pop();
+	return Pool.Pop();
 }
 
 void UActorPool::Return(AActor* ActorToReturn)

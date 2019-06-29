@@ -13,8 +13,7 @@ AInfiniteTerrainGameMode::AInfiniteTerrainGameMode()
 void AInfiniteTerrainGameMode::BeginPlay()
 {
     Super::BeginPlay();
-    PopulateBoundsVolumePool();
-    
+    //PopulateBoundsVolumePool();
 }
 
 void AInfiniteTerrainGameMode::PopulateBoundsVolumePool()
