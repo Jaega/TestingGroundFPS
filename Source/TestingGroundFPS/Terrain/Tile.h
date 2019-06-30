@@ -15,6 +15,23 @@ struct FSpawnPosition
 	float Scale;
 };
 
+USTRUCT(BlueprintType)
+struct FSpawnParameter
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpawnParameter)
+	int MinNum = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpawnParameter)
+	int MaxNum = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpawnParameter)
+	float Radius = 500;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpawnParameter)
+	float MinScale = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=SpawnParameter)
+	float MaxScale = 1;
+};
+
 UCLASS()
 class TESTINGGROUNDFPS_API ATile : public AActor
 {
@@ -41,8 +58,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
-	void PlaceActors(TSubclassOf<AActor> ToSpawn, int Min = 1, int Max = 1, float Radius = 500, float MinScale = 1, float MaxScale = 1);
+	UFUNCTION(BlueprintCallable, Category = Spawning)
+	void PlaceActors(TSubclassOf<AActor> ToSpawn, UPARAM(ref) FSpawnParameter& SpawnParameter);
+	UFUNCTION(BlueprintCallable, Category = Spawning)
+	void PlaceAIPawns(TSubclassOf<APawn> ToSpawn, UPARAM(ref) FSpawnParameter& SpawnParameter);
 	
 	UFUNCTION(BlueprintCallable, Category = Pool)
 	void SetPool(UActorPool* PoolToSet);
@@ -51,8 +70,8 @@ public:
 private:
 	bool CanSpawnAtLocation(FVector Location, float Radius);
 	bool FindEmptySpace(FVector& ResultPoint, float Radius);
-	TArray<FSpawnPosition> GenerateSpawnPositions(int MinNum, int MaxNum, float Radius, float MinScale, float MaxScale);
-	void PlaceActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition);
+	TArray<FSpawnPosition> GenerateSpawnPositions(FSpawnParameter& SpawnParameter);
+	void PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition);
 	void PositionNavMeshBoundsVolume();
 	class UActorPool* Pool;
 	AActor* NavMeshBoundsVolume;
