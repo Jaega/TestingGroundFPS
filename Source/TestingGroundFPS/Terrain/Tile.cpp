@@ -88,10 +88,34 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, FSpawnParameter& SpawnParam
 	
 }
 
+void ATile::PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition)
+{
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ToSpawn);
+	SpawnedActor->SetActorRelativeLocation(SpawnPosition.Location);
+	SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	SpawnedActor->SetActorRotation(FRotator(0, SpawnPosition.Rotation, 0));
+	SpawnedActor->SetActorScale3D(FVector(SpawnPosition.Scale));
+}
+
 void ATile::PlaceAIPawns(TSubclassOf<APawn> ToSpawn, UPARAM(ref) FSpawnParameter& SpawnParameter)
 {
-
+	TArray<FSpawnPosition> SpawnPositionsArray = GenerateSpawnPositions(SpawnParameter);
+	for (FSpawnPosition SpawnPosition: SpawnPositionsArray)
+	{
+		PositionAIPawn(ToSpawn, SpawnPosition);
+	}
 }
+
+void ATile::PositionAIPawn(TSubclassOf<APawn> ToSpawn, FSpawnPosition& SpawnPosition)
+{
+	APawn* SpawnedAI = GetWorld()->SpawnActor<APawn>(ToSpawn);
+	SpawnedAI->SetActorRelativeLocation(SpawnPosition.Location);
+	SpawnedAI->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
+	SpawnedAI->SetActorRotation(FRotator(0, SpawnPosition.Rotation, 0));
+	SpawnedAI->SpawnDefaultController();
+	SpawnedAI->Tags.Add(FName("Enemy"));
+}
+
 
 bool ATile::FindEmptySpace(FVector& ResultPoint, float Radius)
 {
@@ -113,14 +137,7 @@ bool ATile::FindEmptySpace(FVector& ResultPoint, float Radius)
 }
 
 
-void ATile::PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition)
-{
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ToSpawn);
-	SpawnedActor->SetActorRelativeLocation(SpawnPosition.Location);
-	SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-	SpawnedActor->SetActorRotation(FRotator(0, SpawnPosition.Rotation, 0));
-	SpawnedActor->SetActorScale3D(FVector(SpawnPosition.Scale));
-}
+
 
 bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 {

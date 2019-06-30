@@ -66,13 +66,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Pool)
 	void SetPool(UActorPool* PoolToSet);
 	
-
 private:
-	bool CanSpawnAtLocation(FVector Location, float Radius);
-	bool FindEmptySpace(FVector& ResultPoint, float Radius);
 	TArray<FSpawnPosition> GenerateSpawnPositions(FSpawnParameter& SpawnParameter);
 	void PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition);
+	void PositionAIPawn(TSubclassOf<APawn> ToSpawn, FSpawnPosition& SpawnPosition);
 	void PositionNavMeshBoundsVolume();
+
+	bool CanSpawnAtLocation(FVector Location, float Radius);
+	bool FindEmptySpace(FVector& ResultPoint, float Radius);
+
 	class UActorPool* Pool;
 	AActor* NavMeshBoundsVolume;
 };
