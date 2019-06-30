@@ -68,10 +68,13 @@ public:
 	
 private:
 	TArray<FSpawnPosition> GenerateSpawnPositions(FSpawnParameter& SpawnParameter);
-	void PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition);
-	void PositionAIPawn(TSubclassOf<APawn> ToSpawn, FSpawnPosition& SpawnPosition);
-	void PositionNavMeshBoundsVolume();
 
+	template<class T>
+	void RandomlyPlaceActors(TSubclassOf<T> ToSpawn, FSpawnParameter& SpawnParameter);
+	void PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosition);
+	void PositionActor(TSubclassOf<APawn> ToSpawn, FSpawnPosition& SpawnPosition);
+
+	void PositionNavMeshBoundsVolume();
 	bool CanSpawnAtLocation(FVector Location, float Radius);
 	bool FindEmptySpace(FVector& ResultPoint, float Radius);
 
