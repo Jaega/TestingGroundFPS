@@ -101,11 +101,12 @@ void ATile::PositionActor(TSubclassOf<AActor> ToSpawn, FSpawnPosition& SpawnPosi
 
 void ATile::PositionActor(TSubclassOf<APawn> ToSpawn, FSpawnPosition& SpawnPosition)
 {
-	APawn* SpawnedAI = GetWorld()->SpawnActor<APawn>(ToSpawn);
+	FRotator Rotation = FRotator(0, SpawnPosition.Rotation, 0);
+	APawn* SpawnedAI = GetWorld()->SpawnActor<APawn>(ToSpawn, SpawnPosition.Location, Rotation);
 	if (! SpawnedAI) { return; }
-	SpawnedAI->SetActorRelativeLocation(SpawnPosition.Location);
+	//SpawnedAI->SetActorRelativeLocation(SpawnPosition.Location);
 	SpawnedAI->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-	SpawnedAI->SetActorRotation(FRotator(0, SpawnPosition.Rotation, 0));
+	//SpawnedAI->SetActorRotation(FRotator(SpawnPosition.Rotation));
 	SpawnedAI->SpawnDefaultController();
 	SpawnedAI->Tags.Add(FName("Enemy"));
 }
