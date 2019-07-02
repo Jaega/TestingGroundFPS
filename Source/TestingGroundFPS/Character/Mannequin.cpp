@@ -75,7 +75,7 @@ void AMannequin::PullTrigger()
 			GetActorLocation(),
 			1,
 			this,
-			3000
+			10000
 	);
 }
 
