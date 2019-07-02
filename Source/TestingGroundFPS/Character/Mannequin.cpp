@@ -5,6 +5,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/ChildActorComponent.h"
+#include "Runtime/AIModule/Classes/Perception/AISense_Hearing.h"
+
 
 // Sets default values
 AMannequin::AMannequin()
@@ -68,5 +70,12 @@ void AMannequin::UnPossessed()
 void AMannequin::PullTrigger()
 {
 	Gun->OnFire();
+	UAISense_Hearing::ReportNoiseEvent(
+			this,
+			GetActorLocation(),
+			1,
+			this,
+			3000
+	);
 }
 

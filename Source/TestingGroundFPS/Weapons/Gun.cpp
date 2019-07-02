@@ -6,7 +6,6 @@
 #include "Animation/AnimInstance.h"
 
 
-
 // Sets default values
 AGun::AGun()
 {
@@ -62,6 +61,7 @@ void AGun::OnFire()
 	if (FireSound)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+		
 	}
 
 	// try and play a firing animation if specified
