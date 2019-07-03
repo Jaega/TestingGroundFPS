@@ -53,6 +53,5 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void OnFire();
-
 	
 };
