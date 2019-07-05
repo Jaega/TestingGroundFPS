@@ -29,6 +29,7 @@ void UDetectingLight::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	Turn();
+	Elevate();
 	// ...
 }
 
@@ -41,8 +42,31 @@ void UDetectingLight::Initialize(USpotLightComponent* SpotLightToSet)
 
 void UDetectingLight::Turn()
 {
+	if (RelativeRotation.Yaw >= MaxTurningDegree || RelativeRotation.Yaw <= MinTurningDegree)
+	{
+		TurningSpeed = -TurningSpeed;
+	}
+	
     float RotationChange = TurningSpeed * GetWorld()->DeltaTimeSeconds;
     float NewRotation = RelativeRotation.Yaw + RotationChange;
+
     SetRelativeRotation(FRotator(0, NewRotation, 0));
 }
 
+void UDetectingLight::Elevate()
+{
+	if (!ensure(SpotLight)) { return; }
+	if (SpotLight->RelativeRotation.Pitch <= MinElevationDegree || SpotLight->RelativeRotation.Pitch >= MaxElevationDegree)
+	{
+		RandomElevatingSpeed = -RandomElevatingSpeed;
+	}
+    float ElevationChange = RandomElevatingSpeed * GetWorld()->DeltaTimeSeconds;
+    float RawNewElevation = SpotLight->RelativeRotation.Pitch + ElevationChange;
+    float Elevation = FMath::Clamp<float>(RawNewElevation, MinElevationDegree, MaxElevationDegree);
+    SpotLight->SetRelativeRotation(FRotator(Elevation, 0, 0));
+}
+
+void UDetectingLight::RefreshRandomElevatingSpeed()
+{
+	RandomElevatingSpeed = FMath::RandRange(-MaxElevatingSpeed, MaxElevatingSpeed);
+}

@@ -25,11 +25,24 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(class USpotLightComponent* SpotLightToSet);
+	UFUNCTION(BlueprintCallable, Category = Rotation)
+	void RefreshRandomElevatingSpeed();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
 	float TurningSpeed = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
-	float ElevatingSpeed;
+	float MaxTurningDegree= 180;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
+	float MinTurningDegree = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
+	float MaxElevatingSpeed = 20;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
+	float MaxElevationDegree = -10;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
+	float MinElevationDegree = -70;
 private:
 	class USpotLightComponent* SpotLight;
+	float RandomElevatingSpeed = 0;
 	void Turn();
+	void Elevate();
+	
 };
