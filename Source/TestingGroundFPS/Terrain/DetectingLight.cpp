@@ -64,6 +64,7 @@ void UDetectingLight::Elevate()
     float RawNewElevation = SpotLight->RelativeRotation.Pitch + ElevationChange;
     float Elevation = FMath::Clamp<float>(RawNewElevation, MinElevationDegree, MaxElevationDegree);
     SpotLight->SetRelativeRotation(FRotator(Elevation, 0, 0));
+	RefreshRandomElevatingSpeed();
 }
 
 void UDetectingLight::RefreshRandomElevatingSpeed()
