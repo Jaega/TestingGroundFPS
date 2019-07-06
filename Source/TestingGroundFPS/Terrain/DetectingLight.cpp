@@ -42,29 +42,40 @@ void UDetectingLight::Initialize(USpotLightComponent* SpotLightToSet)
 
 void UDetectingLight::Turn()
 {
-	if (RelativeRotation.Yaw >= MaxTurningDegree || RelativeRotation.Yaw <= MinTurningDegree)
+	if (TurningWaitingCount == 10)
 	{
-		TurningSpeed = -TurningSpeed;
+		if ((int)RelativeRotation.Yaw >= MaxTurningDegree || (int)RelativeRotation.Yaw <= MinTurningDegree)
+		{
+			TurningSpeed = -TurningSpeed;
+		}
+		TurningWaitingCount = 0;
 	}
 	
     float RotationChange = TurningSpeed * GetWorld()->DeltaTimeSeconds;
     float NewRotation = RelativeRotation.Yaw + RotationChange;
 
     SetRelativeRotation(FRotator(0, NewRotation, 0));
+	TurningWaitingCount++;
 }
 
 void UDetectingLight::Elevate()
 {
 	if (!ensure(SpotLight)) { return; }
-	if (SpotLight->RelativeRotation.Pitch <= MinElevationDegree || SpotLight->RelativeRotation.Pitch >= MaxElevationDegree)
+	if (ElevationWaitingCount == 10)
 	{
-		RandomElevatingSpeed = -RandomElevatingSpeed;
+		if ((int)SpotLight->RelativeRotation.Pitch <= MinElevationDegree || (int)SpotLight->RelativeRotation.Pitch >= MaxElevationDegree)
+		{
+			RandomElevatingSpeed = -RandomElevatingSpeed;
+		}
+		ElevationWaitingCount = 0;
 	}
+	
+	
     float ElevationChange = RandomElevatingSpeed * GetWorld()->DeltaTimeSeconds;
     float RawNewElevation = SpotLight->RelativeRotation.Pitch + ElevationChange;
     float Elevation = FMath::Clamp<float>(RawNewElevation, MinElevationDegree, MaxElevationDegree);
     SpotLight->SetRelativeRotation(FRotator(Elevation, 0, 0));
-	RefreshRandomElevatingSpeed();
+	ElevationWaitingCount++;
 }
 
 void UDetectingLight::RefreshRandomElevatingSpeed()

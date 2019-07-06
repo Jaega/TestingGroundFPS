@@ -28,21 +28,23 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Rotation)
 	void RefreshRandomElevatingSpeed();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
-	float TurningSpeed = 10;
+	float TurningSpeed = 30;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
-	float MaxTurningDegree= 180;
+	int MaxTurningDegree= 180;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
-	float MinTurningDegree = 0;
+	int MinTurningDegree = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
 	float MaxElevatingSpeed = 20;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
-	float MaxElevationDegree = -10;
+	int MaxElevationDegree = -10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Rotation)
-	float MinElevationDegree = -70;
+	int MinElevationDegree = -65;
 private:
 	class USpotLightComponent* SpotLight;
 	float RandomElevatingSpeed = 0;
 	void Turn();
 	void Elevate();
-	
+	// Variables that delay the light from reversing direction in case it gets "trapped" in the boundary
+	int TurningWaitingCount = 0;
+	int ElevationWaitingCount = 0;
 };
