@@ -27,6 +27,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	void PullTrigger();
 
+	void Reload();
+
 private:
 
 	/** First person camera */

@@ -29,6 +29,7 @@ AGun::AGun()
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
+	CurrentAmmoAmount = MaxAmmoAmount;
 }
 
 // Called every frame
@@ -39,6 +40,13 @@ void AGun::Tick(float DeltaTime)
 
 void AGun::OnFire()
 {
+	if (bIsReloading) { return; }
+	if (CurrentAmmoAmount <= 0) 
+	{ 
+		StartReloading();
+		return; 
+	}
+	
 	// try and fire a projectile
 	if (ProjectileClass)
 	{
@@ -72,5 +80,23 @@ void AGun::OnFire()
 			AnimInstance->Montage_Play(FireAnimation, 1.f);
 		}
 	}
+
+	CurrentAmmoAmount--;
+}
+
+void AGun::StartReloading()
+{
+	if(CurrentAmmoAmount >= MaxAmmoAmount) { return; }
+	if (bIsReloading) { return; }
+	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &AGun::FinishReloading, ReloadTime, false);
+	bIsReloading = true;
+	return;
+}
+
+void AGun::FinishReloading()
+{
+	CurrentAmmoAmount = MaxAmmoAmount;
+	bIsReloading = false;
+	GetWorld()->GetTimerManager().ClearTimer(ReloadTimerHandle);
 }
 

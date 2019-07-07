@@ -48,10 +48,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimInstance* AnimInstance;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	int MaxAmmoAmount = 30;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	int CurrentAmmoAmount = 30;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	float ReloadTime = 4;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Gameplay)
+	bool bIsReloading = false;
+
+	FTimerHandle ReloadTimerHandle;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = Gameplay)
 	void OnFire();
+
+	void StartReloading();
+
+	UFUNCTION(BlueprintCallable, Category = Gameplay)
+	void FinishReloading();
 	
 };

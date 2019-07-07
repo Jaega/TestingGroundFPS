@@ -56,6 +56,7 @@ void AMannequin::BeginPlay()
 	if(InputComponent)
 	{
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMannequin::PullTrigger);
+		InputComponent->BindAction("Reload", IE_Pressed, this, &AMannequin::Reload);
 	}
 }
 
@@ -77,6 +78,11 @@ void AMannequin::PullTrigger()
 			this,
 			10000
 	);
+}
+
+void AMannequin::Reload()
+{
+	Gun->StartReloading();
 }
 
 
