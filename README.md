@@ -15,4 +15,8 @@ This is an FPS game I created following along an online Unreal C++ tutorial
 + AI Perception
 + AI Navigation
 + Animation
++ Animation state machine
 + Material
++ Spawning actors
++ Flyweight pattern for foliage
++ Postprocess Volume
