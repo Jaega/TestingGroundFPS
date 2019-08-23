@@ -14,6 +14,7 @@ This is an FPS game I created following along an online Unreal C++ tutorial
 + AI Behavior Tree
 + AI Perception
 + AI Navigation
++ Environmental Query System
 + Animation
 + Animation state machine
 + Material
